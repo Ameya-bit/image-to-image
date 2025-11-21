@@ -75,8 +75,9 @@ function startRearrangement() {
             const sourcePixels = createPixelList(sourceData);
 
             // 3. Sort pixels by brightness
-            sortPixelList(targetPixels);
-            sortPixelList(sourcePixels);
+            // Moved inside generatePixelMapping for Edge Prioritization logic
+            // sortPixelList(targetPixels);
+            // sortPixelList(sourcePixels);
 
             // 4. Generate mapping
             const particles = generatePixelMapping(sourcePixels, targetPixels);
