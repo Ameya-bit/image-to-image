@@ -5,26 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Rearrangement</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #ffffff;
-            --surface-color: #f5f5f5;
-            --primary-color: #6200ee;
-            --text-color: #000000;
+            --bg-color: #f8f9fa;
+            --surface-color: rgba(255, 255, 255, 0.7);
+            /* Oil Spill Accent: Pink -> Purple -> Blue -> Cyan -> Green -> Gold */
+            --oil-gradient: linear-gradient(125deg, #EF008C, #7A00E6, #2800D7, #00C0E4, #00FF94, #C9FF23, #FFB800, #EF008C);
+            --text-color: #1a1a1a;
             --secondary-text: #666666;
-            --accent-height: 4px;
+            --glass-border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        @keyframes oil-shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 200% 50%;
+            }
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Outfit', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
+            /* Clean light background */
+            background-image: none;
         }
 
         main {
@@ -33,7 +49,6 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            background-color: var(--bg-color);
             padding: 0;
         }
 
@@ -44,32 +59,49 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            /* Soft shadow for depth on white */
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.08));
         }
 
         canvas {
             display: block;
             max-width: 100%;
-            max-height: 80vh;
+            max-height: 85vh;
             width: auto;
             height: auto;
             image-rendering: pixelated;
         }
 
         .bottom-bar {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 1000px;
             height: 80px;
-            background-color: var(--surface-color);
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
-            border-top: var(--accent-height) solid var(--primary-color);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            padding: 0 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .bottom-bar:hover {
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
         }
 
         .controls {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             align-items: center;
         }
 
@@ -78,55 +110,74 @@
         }
 
         .btn {
-            background-color: var(--primary-color);
+            background: var(--oil-gradient);
+            background-size: 300% 300%;
+            animation: oil-shimmer 8s linear infinite;
             color: #fff;
+            /* White text on vibrant accent */
             border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
+            padding: 12px 28px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: background-color 0.2s, transform 0.1s;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 192, 228, 0.2);
         }
 
         .btn:hover {
-            background-color: #3700b3;
-            transform: translateY(-1px);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 255, 148, 0.3);
+            filter: brightness(1.05);
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.98);
         }
 
         .btn:disabled {
-            background-color: #ccc;
+            background: #e0e0e0;
+            color: #999;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
+            animation: none;
         }
 
         .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+            font-weight: 500;
+            box-shadow: none;
+            animation: none;
         }
 
         .btn-outline:hover {
-            background-color: rgba(98, 0, 238, 0.04);
-            color: var(--primary-color);
+            border-color: #000;
+            background: rgba(0, 0, 0, 0.03);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .status {
             color: var(--secondary-text);
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
 
         .logo {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--oil-gradient);
+            background-size: 300% 300%;
+            animation: oil-shimmer 8s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: -0.5px;
         }
     </style>
@@ -150,7 +201,7 @@
                 <input type="file" id="fileInput" accept="image/*">
             </label>
 
-            <button id="startBtn" class="btn" disabled>Start</button>
+            <button id="startBtn" class="btn" disabled>Start Magic</button>
         </div>
     </div>
 
