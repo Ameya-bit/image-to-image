@@ -52,7 +52,9 @@ export function generatePixelMapping(sourcePixels, targetPixels) {
         const target = targetPixels[i];
 
         mapping.push({
-            color: `rgb(${source.r}, ${source.g}, ${source.b})`,
+            r: source.r,
+            g: source.g,
+            b: source.b,
             startX: source.x,
             startY: source.y,
             endX: target.x,

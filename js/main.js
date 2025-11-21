@@ -3,8 +3,8 @@ import { createPixelList, sortPixelList, generatePixelMapping } from './pixelPro
 import { ParticleRenderer } from './renderer.js';
 
 // Configuration
-const MAX_WIDTH = 150; // Reduced size for performance
-const MAX_HEIGHT = 150;
+// MAX_WIDTH and MAX_HEIGHT are now determined dynamically
+
 
 // State
 let targetImage = null;
@@ -60,6 +60,10 @@ function startRearrangement() {
     // Use setTimeout to allow UI to update before heavy processing
     setTimeout(() => {
         try {
+            // Default to High Resolution
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 800;
+
             // 1. Resize and get data for both images
             // We use the same dimensions for both to ensure 1:1 pixel mapping works best
             // or at least they are comparable.

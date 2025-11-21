@@ -8,7 +8,7 @@ function easeInOutCubic(t) {
 }
 
 /**
- * Renders the particles on the canvas.
+ * Renders the particles on the canvas using ImageData for performance.
  * @param {CanvasRenderingContext2D} ctx - The canvas context.
  * @param {Array<Object>} particles - List of particles.
  * @param {number} progress - Animation progress (0 to 1).
@@ -16,21 +16,32 @@ function easeInOutCubic(t) {
  * @param {number} height - Canvas height.
  */
 export function drawParticles(ctx, particles, progress, width, height) {
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
+    // Create ImageData buffer
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data;
 
     // Calculate eased progress
     const t = easeInOutCubic(progress);
 
     for (const p of particles) {
         // Interpolate position
-        const x = p.startX + (p.endX - p.startX) * t;
-        const y = p.startY + (p.endY - p.startY) * t;
+        const x = Math.round(p.startX + (p.endX - p.startX) * t);
+        const y = Math.round(p.startY + (p.endY - p.startY) * t);
 
-        // Draw particle
-        ctx.fillStyle = p.color;
-        ctx.fillRect(x, y, 1, 1);
+        // Boundary check
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            const index = (y * width + x) * 4;
+            
+            // Use direct RGB values
+            data[index] = p.r;     // Red
+            data[index + 1] = p.g; // Green
+            data[index + 2] = p.b; // Blue
+            data[index + 3] = 255; // Alpha
+        }
     }
+
+    // Blit to canvas
+    ctx.putImageData(imageData, 0, 0);
 }
 
 /**
