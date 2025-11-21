@@ -1,0 +1,35 @@
+# Image-to-Image Modular Implementation Plan
+
+## Goal
+Build a web app that rearranges pixels from a source image to match a target image, implemented in a strictly modular, function-by-function manner. Each module will be verified independently.
+
+## Project Structure
+`C:\Users\ameya\Antigravity_tests\image-to-image\`
+- `index.html`: UI shell.
+- `js/imageUtils.js`: Image loading and canvas data extraction.
+- `js/pixelProcessor.js`: Pure logic for pixel sorting and mapping.
+- `js/renderer.js`: Canvas rendering and animation logic.
+- `js/main.js`: Application glue code.
+- `target.jpg`: The reference image.
+
+## Modules & Functions
+
+### 1. Image Utils (`js/imageUtils.js`)
+- `async function loadImage(src)`: Returns a Promise that resolves with an Image object.
+- `function getResizedImageData(image, maxWidth, maxHeight)`: Returns `ImageData` for the image, scaled down to fit constraints.
+
+### 2. Pixel Processor (`js/pixelProcessor.js`)
+- `function getPixelList(imageData)`: Converts `ImageData` into an array of objects `{r, g, b, x, y, brightness}`.
+- `function sortPixelsByBrightness(pixelList)`: Sorts the array in place or returns a new sorted array.
+- `function mapPixels(sourcePixels, targetPixels)`: Returns an array of particles where each particle has a color/startPos from `sourcePixels` and an endPos from `targetPixels` (matched by sorted index).
+
+### 3. Renderer (`js/renderer.js`)
+- `class ParticleSystem`: Manages the current state of particles.
+- `function draw(ctx, particles, progress)`: Clears canvas and draws particles at interpolated positions.
+
+### 4. Integration (`js/main.js`)
+- Handles file input.
+- Orchestrates the flow: Load -> Process -> Animate.
+
+## Verification Strategy
+For each module, I will create a temporary test HTML file (e.g., `test_utils.html`) or use the browser console to verify the functions work as expected before moving to the next one.
