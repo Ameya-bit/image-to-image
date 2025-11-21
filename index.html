@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Rearrangement</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --primary-color: #bb86fc;
+            --text-color: #e0e0e0;
+            --secondary-text: #a0a0a0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px;
+            background-color: var(--surface-color);
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: var(--surface-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .canvas-container {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            background-color: #000;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+        }
+
+        .status {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Pixel Rearrange</h1>
+    </header>
+
+    <main>
+        <div class="controls">
+            <label class="btn btn-outline">
+                Upload Source Image
+                <input type="file" id="fileInput" accept="image/*">
+            </label>
+            <button id="startBtn" class="btn" disabled>Rearrange Pixels</button>
+        </div>
+
+        <div class="status" id="statusText">Waiting for image...</div>
+
+        <div class="canvas-container">
+            <canvas id="mainCanvas"></canvas>
+        </div>
+    </main>
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
